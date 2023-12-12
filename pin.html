@@ -1,0 +1,45 @@
+<html>
+<head>
+  <style>
+    #password, #confirm {
+      width: 200px;
+    }
+    #message1, #message2 {
+      color: red;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <label for="password">パスワードを入力してください:</label>
+    <input type="password" id="password" name="password" oninput="checkPassword()">
+    <p id="message1">パスワードは8文字以上で英数字を含む必要があります。</p>
+    <label for="confirm">パスワードをもう一度入力してください:</label>
+    <input type="password" id="confirm" name="confirm" oninput="checkConfirm()">
+    <p id="message2">パスワードが一致しません。</p>
+  </form>
+  <script>
+    function checkPassword() {
+      var password = document.getElementById("password").value;
+      var message1 = document.getElementById("message1");
+      var regex = /^[A-Za-z0-9]{8,}$/; //英数字のみで8文字以上の正規表現
+      if (regex.test(password)) {
+        message1.style.display = "none"; //メッセージを非表示にする
+      } else {
+        message1.style.display = "block"; //メッセージを表示する
+      }
+    }
+    function checkConfirm() {
+      var password = document.getElementById("password").value;
+      var confirm = document.getElementById("confirm").value;
+      var message2 = document.getElementById("message2");
+      if (password === confirm) {
+        message2.style.display = "none"; //メッセージを非表示にする
+      } else {
+        message2.style.display = "block"; //メッセージを表示する
+      }
+    }
+  </script>
+</body>
+</html>
