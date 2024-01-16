@@ -1,0 +1,85 @@
+<html>
+<head>
+  <style>
+    #password, #confirm {
+      width: 200px;
+    }
+    #message1, #message2, #message3 {
+      color: red;
+      display: none;
+    }
+    #strength {
+      color: green;
+      display: none;
+    }
+     label {
+      display:block;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <label for="password">パスワードを入力してください:</label>
+    <input type="password" id="password" name="password" oninput="checkPassword()">
+    <p id="message1">パスワードは8文字以上の英数字記号で入力してください。</p>
+    <p id="strength">パスワードの強度: </p>
+    <label for="confirm">パスワードをもう一度入力してください:</label>
+    <input type="password" id="confirm" name="confirm" oninput="checkConfirm()">
+    <p id="message2">パスワードが一致しません。</p>
+    <p id="message3">パスワードを入力してください。</p>
+  </form>
+  <script>
+    function checkPassword() {
+      var password = document.getElementById("password").value;
+      var message1 = document.getElementById("message1");
+      var message3 = document.getElementById("message3");
+      var strength = document.getElementById("strength");
+      var regex = /^[A-Za-z0-9]{8,}$/; //英数字のみで8文字以上の正規表現
+      if (password.length == 0) { //パスワードが空の場合
+        message1.style.display = "none"; //メッセージ1を非表示にする
+        message3.style.display = "block"; //メッセージ3を表示する
+        strength.style.display = "none"; //強度を非表示にする
+      } else if (regex.test(password)) { //パスワードが正規表現に一致する場合
+        message1.style.display = "none"; //メッセージ1を非表示にする
+        message3.style.display = "none"; //メッセージ3を非表示にする
+        strength.style.display = "block"; //強度を表示する
+        strength.innerHTML = "パスワードの強度: " + getStrength(password); //強度を計算して表示する
+      } else { //パスワードが正規表現に一致しない場合
+        message1.style.display = "block"; //メッセージ1を表示する
+        message3.style.display = "none"; //メッセージ3を非表示にする
+        strength.style.display = "none"; //強度を非表示にする
+      }
+    }
+    function checkConfirm() {
+      var password = document.getElementById("password").value;
+      var confirm = document.getElementById("confirm").value;
+      var message2 = document.getElementById("message2");
+      if (password === confirm) { //パスワードと確認が一致する場合
+        message2.style.display = "none"; //メッセージ2を非表示にする
+      } else { //パスワードと確認が一致しない場合
+        message2.style.display = "block"; //メッセージ2を表示する
+      }
+    }
+    function getStrength(password) { //パスワードの強度を計算する関数
+      var score = 0; //スコアを初期化する
+      var lower = /[a-z]/; //小文字の正規表現
+      var upper = /[A-Z]/; //大文字の正規表現
+      var number = /[0-9]/; //数字の正規表現
+      var symbol = /[^A-Za-z0-9]/; //記号の正規表現
+      if (lower.test(password)) score += 1; //パスワードに小文字が含まれる場合、スコアに1を加算する
+      if (upper.test(password)) score += 1; //パスワードに大文字が含まれる場合、スコアに1を加算する
+      if (number.test(password)) score += 1; //パスワードに数字が含まれる場合、スコアに1を加算する
+      if (symbol.test(password)) score += 1; //パスワードに記号が含まれる場合、スコアに1を加算する
+      if (password.length >= 12) score += 1; //パスワードの長さが12文字以上の場合、スコアに1を加算する
+      switch (score) { //スコアに応じて強度を返す
+        case 1: return "弱い";
+        case 2: return "やや弱い";
+        case 3: return "普通";
+        case 4: return "やや強い";
+        case 5: return "強い";
+        default: return "不明";
+      }
+    }
+  </script>
+</body>
+</html>
